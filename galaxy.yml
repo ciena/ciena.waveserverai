@@ -1,0 +1,15 @@
+---
+authors:
+  - Santiago Echevarria (sechevar@ciena.com)
+  - Jeff Groom (jgroom@ciena.com)
+dependencies:
+  "ansible.netcommon": ">=2.0.1"
+license_file: LICENSE
+name: waveserverai
+namespace: ciena
+description: Ansible Network Collection for Ciena Waveserver Ai devices.
+readme: README.md
+repository: https://github.com/ciena/ciena.waveserverai
+issues: https://github.com/ciena/ciena.waveserverai/issues
+tags: [ciena, waveserver, waveserverai, networking, security, netconf]
+version: null
