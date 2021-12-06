@@ -124,7 +124,7 @@ class Xcvr(ConfigBase):
 
         for xml in config_xmls:
             root.append(xml)
-
+        raise Exception("TODO")
         return self._module._connection.tostring(root)
 
     def _state_replaced(self, want, have):

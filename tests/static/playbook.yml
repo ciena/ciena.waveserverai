@@ -10,9 +10,11 @@
     #   ciena.waveserverai.waveserverai_facts:
     #     gather_subset:
     #       - all
+    #     gather_network_resources:
+    #       - all
     - name: Configure interfaces
       ciena.waveserverai.waveserverai_xcvr:
         config:
-          - xcvr-id: 1/1
+          - xcvr-id: 1-1
             properties:
               mode: 56-400

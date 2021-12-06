@@ -66,9 +66,7 @@ class XcvrFacts(object):
             config_filter = """
                 <xcvr:waveserver-xcvrs xmlns:xcvr="urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr">
                     <xcvr:xcvrs>
-                        <xcvr:state>
-                            <xcvr:operational-state/>
-                        </xcvr:state>
+                        <xcvr:state/>
                     </xcvr:xcvrs>
                 </xcvr:waveserver-xcvrs>
                 """
@@ -87,14 +85,13 @@ class XcvrFacts(object):
                 obj = self.render_config(self.generated_spec, resource)
                 if obj:
                     objs.append(obj)
-
         facts = {}
         if objs:
-            facts['xcvrs'] = []
+            facts['xcvr'] = []
             params = utils.validate_config(self.argument_spec,
                                            {'config': objs})
             for cfg in params['config']:
-                facts['xcvrs'].append(utils.remove_empties(cfg))
+                facts['xcvr'].append(utils.remove_empties(cfg))
 
         ansible_facts['ansible_network_resources'].update(facts)
         return ansible_facts
@@ -110,6 +107,6 @@ class XcvrFacts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-        config['name'] = utils.get_xml_conf_arg(conf, 'name')
-        config['some_value'] = utils.get_xml_conf_arg(conf, 'some_value')
+        config['xcvr-id'] = utils.get_xml_conf_arg(conf, 'xcvr-id')
+        config['properties']['mode'] = utils.get_xml_conf_arg(conf, 'state/actual-mode')
         return utils.remove_empties(config)
