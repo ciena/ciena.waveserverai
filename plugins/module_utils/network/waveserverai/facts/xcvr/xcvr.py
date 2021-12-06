@@ -77,12 +77,9 @@ class XcvrFacts(object):
         root = remove_ns(data)
 
         # raise Exception(xml_to_string(root, encoding='utf8', method='xml'))
-        # TODO: Working to here
-        xcvrs = root.xpath(
-            "/data/xcvrs"
-        ).text
-
-        resources = data.xpath('configuration/resources/resource')
+        resources = root.xpath(
+            "/data/waveserver-xcvrs/xcvrs"
+        )
 
         objs = []
         for resource in resources:
@@ -93,11 +90,11 @@ class XcvrFacts(object):
 
         facts = {}
         if objs:
-            facts['resource'] = []
+            facts['xcvrs'] = []
             params = utils.validate_config(self.argument_spec,
                                            {'config': objs})
             for cfg in params['config']:
-                facts['resource'].append(utils.remove_empties(cfg))
+                facts['xcvrs'].append(utils.remove_empties(cfg))
 
         ansible_facts['ansible_network_resources'].update(facts)
         return ansible_facts
