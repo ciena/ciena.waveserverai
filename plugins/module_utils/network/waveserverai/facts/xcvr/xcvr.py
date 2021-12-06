@@ -15,24 +15,29 @@ from ansible.module_utils._text import to_bytes
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvr.xcvr import (
-    XcvrArgs,
+from lxml.etree import tostring as xml_to_string, fromstring
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.netconf.netconf import (
+    get,
 )
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.waveserverai import (
+    get_configuration,
+    get_capabilities,
+    remove_ns,
+)
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvr.xcvr import XcvrArgs
 from ansible.module_utils.six import string_types
-
 try:
     from lxml import etree
-
     HAS_LXML = True
 except ImportError:
     HAS_LXML = False
 
 
 class XcvrFacts(object):
-    """The waveserverai xcvr fact class"""
+    """ The waveserverai xcvr fact class
+    """
 
-    def __init__(self, module, subspec="config", options="options"):
+    def __init__(self, module, subspec='config', options='options'):
         self._module = module
         self.argument_spec = XcvrArgs.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -47,25 +52,37 @@ class XcvrFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """Populate the facts for xcvr
+        """ Populate the facts for xcvr
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
         :rtype: dictionary
         :returns: facts
         """
-
         if not HAS_LXML:
-            self._module.fail_json(msg="lxml is not installed.")
+            self._module.fail_json(msg='lxml is not installed.')
 
         if not data:
-            raise Exception("Not yet Implemented")
-        if isinstance(data, string_types):
-            data = etree.fromstring(
-                to_bytes(data, errors="surrogate_then_replace")
-            )
+            config_filter = """
+                <xcvr:waveserver-xcvrs xmlns:xcvr="urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr">
+                    <xcvr:xcvrs>
+                        <xcvr:state>
+                            <xcvr:operational-state/>
+                        </xcvr:state>
+                    </xcvr:xcvrs>
+                </xcvr:waveserver-xcvrs>
+                """
+            data = get(self._module, filter=("subtree", config_filter))
 
-        resources = data.xpath("configuration/xcvr")
+        root = remove_ns(data)
+
+        # raise Exception(xml_to_string(root, encoding='utf8', method='xml'))
+        # TODO: Working to here
+        xcvrs = root.xpath(
+            "/data/xcvrs"
+        ).text
+
+        resources = data.xpath('configuration/resources/resource')
 
         objs = []
         for resource in resources:
@@ -76,14 +93,13 @@ class XcvrFacts(object):
 
         facts = {}
         if objs:
-            facts["resource"] = []
-            params = utils.validate_config(
-                self.argument_spec, {"config": objs}
-            )
-            for cfg in params["config"]:
-                facts["resource"].append(utils.remove_empties(cfg))
+            facts['resource'] = []
+            params = utils.validate_config(self.argument_spec,
+                                           {'config': objs})
+            for cfg in params['config']:
+                facts['resource'].append(utils.remove_empties(cfg))
 
-        ansible_facts["ansible_network_resources"].update(facts)
+        ansible_facts['ansible_network_resources'].update(facts)
         return ansible_facts
 
     def render_config(self, spec, conf):
@@ -97,21 +113,6 @@ class XcvrFacts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-        config["name"] = utils.get_xml_conf_arg(conf, "name")
-        config["some_value"] = utils.get_xml_conf_arg(conf, "some_value")
+        config['name'] = utils.get_xml_conf_arg(conf, 'name')
+        config['some_value'] = utils.get_xml_conf_arg(conf, 'some_value')
         return utils.remove_empties(config)
-
-    def get(self, filter=None, with_defaults=None):
-        """
-        Retrieve device configuration and state information.
-        :param filter: This argument specifies the portion of the state data to retrieve
-                       (by default entire state data is retrieved)
-        :param with_defaults: defines an explicit method of retrieving default values
-                              from the configuration
-        :return: Returns xml string containing the RPC response received from remote host
-        """
-        if isinstance(filter, list):
-            filter = tuple(filter)
-        resp = self.m.get(filter=filter, with_defaults=with_defaults)
-        response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-        return response

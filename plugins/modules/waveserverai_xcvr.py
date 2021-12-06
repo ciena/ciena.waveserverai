@@ -27,13 +27,12 @@ The module file for waveserverai_xcvr
 """
 
 from __future__ import absolute_import, division, print_function
-
 __metaclass__ = type
 
 ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'network'
 }
 
 DOCUMENTATION = """
@@ -41,7 +40,7 @@ DOCUMENTATION = """
 module: waveserverai_xcvr
 version_added: 2.9
 short_description: Manage XCVR on Ciena Waveserver Ai devices
-description: This module provides declarative management of a transceiver on Ciena Waveserver Ai devices.
+description: This module provides declarative management of a transceiver
 author: Ciena
 options:
   config:
@@ -98,14 +97,12 @@ EXAMPLES = """
 <placeholder for the configuration example prior to module invocation>
 
 - name: Configure interfaces
-  nxos_interfaces:
+  ciena.waveserverai.waveserverai_xcvr:
     config:
-      - name: Ethernet1/1
-        description: 'Configured by Ansible'
-        enable: True
-      - name: Ethernet1/2
-        description: 'Configured by Ansible'
-        enable: False
+      - name: 1/1
+        properties:
+          suboptions:
+            mode: 56-400
     operation: merged
 
 <placeholder for the configuration example after module invocation>
@@ -152,12 +149,8 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvr.xcvr import (
-    XcvrArgs,
-)
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.xcvr.xcvr import (
-    Xcvr,
-)
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvr.xcvr import XcvrArgs
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.xcvr.xcvr import Xcvr
 
 
 def main():
@@ -166,13 +159,12 @@ def main():
 
     :returns: the result form module invocation
     """
-    module = AnsibleModule(
-        argument_spec=XcvrArgs.argument_spec, supports_check_mode=True
-    )
+    module = AnsibleModule(argument_spec=XcvrArgs.argument_spec,
+                           supports_check_mode=True)
 
     result = Xcvr(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

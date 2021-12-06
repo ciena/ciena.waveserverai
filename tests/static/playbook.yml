@@ -1,12 +1,18 @@
 ---
 - hosts: all
+  connection: netconf
   collections:
     - ciena.waveserverai
   gather_facts: false
   name: Gather facts for ciena device Waveserver Ai
   tasks:
-    - name: get device facts for waveserverai device
-      ciena.waveserverai.waveserverai_facts:
-        gather_subset:
-          - all
-      connection: netconf
+    # - name: get device facts for waveserverai device
+    #   ciena.waveserverai.waveserverai_facts:
+    #     gather_subset:
+    #       - all
+    - name: Configure interfaces
+      ciena.waveserverai.waveserverai_xcvr:
+        config:
+          - xcvr-id: 1/1
+            properties:
+              mode: 56-400

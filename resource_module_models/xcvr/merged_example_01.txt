@@ -4,14 +4,11 @@
 <placeholder for the configuration example prior to module invocation>
 
 - name: Configure interfaces
-  nxos_interfaces:
+  ciena.waveserverai.waveserverai_xcvr:
     config:
-      - name: Ethernet1/1
-        description: 'Configured by Ansible'
-        enable: True
-      - name: Ethernet1/2
-        description: 'Configured by Ansible'
-        enable: False
+      - name: 1/1
+        properties:
+          mode: 56-400
     operation: merged
 
 <placeholder for the configuration example after module invocation>
