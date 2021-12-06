@@ -1,0 +1,8 @@
+---
+all:
+  hosts:
+    WS-1P:
+      ansible_host: 10.92.44.206
+      ansible_network_os: ciena.waveserverai.waveserverai
+      ansible_user: su
+      ansible_password: anystring
