@@ -61,23 +61,23 @@ EXAMPLES = """
     gather_subset: all
     gather_network_resources: all
 
-# Collect only the xcvr facts
+# Collect only the xcvrs facts
 - waveserverai_facts:
     gather_subset:
       - !all
       - !min
     gather_network_resources:
-      - xcvr
+      - xcvrs
 
-# Do not collect xcvr facts
+# Do not collect xcvrs facts
 - waveserverai_facts:
     gather_network_resources:
-      - "!xcvr"
+      - "!xcvrs"
 
-# Collect xcvr and minimal default facts
+# Collect xcvrs and minimal default facts
 - waveserverai_facts:
     gather_subset: min
-    gather_network_resources: xcvr
+    gather_network_resources: xcvrs
 """
 
 RETURN = """

@@ -51,12 +51,10 @@ class Netconf(NetconfBase):
     def get_capabilities(self):
         result = dict()
         result["rpc"] = self.get_base_rpc() + [
-            "commit",
             "discard_changes",
             "lock",
             "unlock",
             "execute_rpc",
-            "load_configuration",
             "get_configuration",
             "reboot",
             "halt",

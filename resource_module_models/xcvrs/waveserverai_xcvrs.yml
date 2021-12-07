@@ -8,11 +8,11 @@ ANSIBLE_METADATA: |
     'supported_by': 'network'
   }
 NETWORK_OS: waveserverai
-RESOURCE: xcvr
+RESOURCE: xcvrs
 COPYRIGHT: Copyright 2021 Ciena
 
 DOCUMENTATION: |
-  module: waveserverai_xcvr
+  module: waveserverai_xcvrs
   version_added: 2.9
   short_description: Manage XCVR on Ciena Waveserver Ai devices
   description: This module provides declarative management of a transceiver
@@ -60,7 +60,6 @@ DOCUMENTATION: |
     state:
       choices:
       - merged
-      - overridden
       default: merged
       description:
       - The state the configuration should be left in
@@ -75,4 +74,3 @@ notes:
 
 EXAMPLES:
   - merged_example_01.txt
-  - overridden_example_01.txt

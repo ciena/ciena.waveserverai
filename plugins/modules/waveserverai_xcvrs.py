@@ -23,21 +23,22 @@
 #############################################
 
 """
-The module file for waveserverai_xcvr
+The module file for waveserverai_xcvrs
 """
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'network'
+    "metadata_version": "1.1",
+    "status": ["preview"],
+    "supported_by": "network",
 }
 
 DOCUMENTATION = """
 ---
-module: waveserverai_xcvr
+module: waveserverai_xcvrs
 version_added: 2.9
 short_description: Manage XCVR on Ciena Waveserver Ai devices
 description: This module provides declarative management of a transceiver
@@ -97,7 +98,7 @@ EXAMPLES = """
 <placeholder for the configuration example prior to module invocation>
 
 - name: Configure interfaces
-  ciena.waveserverai.waveserverai_xcvr:
+  ciena.waveserverai.waveserverai_xcvrs:
     config:
       - name: 1/1
         properties:
@@ -149,8 +150,12 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvr.xcvr import XcvrArgs
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.xcvr.xcvr import Xcvr
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvrs.xcvrs import (
+    XcvrsArgs,
+)
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.xcvrs.xcvrs import (
+    Xcvrs,
+)
 
 
 def main():
@@ -159,12 +164,13 @@ def main():
 
     :returns: the result form module invocation
     """
-    module = AnsibleModule(argument_spec=XcvrArgs.argument_spec,
-                           supports_check_mode=True)
+    module = AnsibleModule(
+        argument_spec=XcvrsArgs.argument_spec, supports_check_mode=True
+    )
 
-    result = Xcvr(module).execute_module()
+    result = Xcvrs(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

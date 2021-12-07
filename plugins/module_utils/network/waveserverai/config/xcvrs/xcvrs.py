@@ -1,10 +1,10 @@
 #
 # -*- coding: utf-8 -*-
-# Copyright 2019 Red Hat
+# Copyright 2021 Ciena Corporation.
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
-The waveserverai_xcvr class
+The waveserverai_xcvrs class
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
@@ -13,32 +13,38 @@ created
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
+from ansible.module_utils._text import to_text, to_bytes
+
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.waveserverai import (
+    xml_to_string,
+    fromstring,
+)
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
 from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.facts.facts import (
     Facts,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.netconf.netconf import (
-    locked_config,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
+    remove_namespaces,
     build_root_xml_node,
+    build_child_xml_node,
 )
 
 
-class Xcvr(ConfigBase):
+class Xcvrs(ConfigBase):
     """
-    The waveserverai_xcvr class
+    The waveserverai_xcvrs class
     """
 
     gather_subset = ["!all", "!min"]
-    gather_network_resources = ["xcvr"]
+    gather_network_resources = ["xcvrs"]
 
     def __init__(self, module):
-        super(Xcvr, self).__init__(module)
+        super(Xcvrs, self).__init__(module)
 
-    def get_xcvr_facts(self):
+    def get_xcvrs_facts(self):
         """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
@@ -47,10 +53,10 @@ class Xcvr(ConfigBase):
         facts, _warnings = Facts(self._module).get_facts(
             self.gather_subset, self.gather_network_resources
         )
-        xcvr_facts = facts["ansible_network_resources"].get("xcvr")
-        if not xcvr_facts:
+        xcvrs_facts = facts["ansible_network_resources"].get("xcvrs")
+        if not xcvrs_facts:
             return []
-        return xcvr_facts
+        return xcvrs_facts
 
     def execute_module(self):
         """Execute the module
@@ -59,37 +65,31 @@ class Xcvr(ConfigBase):
         :returns: The result from module execution
         """
         result = {"changed": False}
-        existing_xcvr_facts = self.get_xcvr_facts()
-        config_xmls = self.set_config(existing_xcvr_facts)
+        existing_xcvrs_facts = self.get_xcvrs_facts()
+        config_xmls = self.set_config(existing_xcvrs_facts)
 
-        with locked_config(self._module):
-            for config_xml in to_list(config_xmls):
-                diff = self._module._connectionload_config(
-                    self._module, config_xml, []
-                )
+        for config_xml in to_list(config_xmls):
+            config = f'<config>{config_xml.decode("utf-8")}</config>'
+            kwargs = {
+                "config": config,
+                "target": "running",
+                "default_operation": "merge",
+                "format": "xml",
+            }
 
-            commit = not self._module.check_mode
-            if diff:
-                if commit:
-                    self._module._connection.commit_configuration(self._module)
-                else:
-                    self._module._connection.discard_changes(self._module)
-                result["changed"] = True
-
-                if self._module._diff:
-                    result["diff"] = {"prepared": diff}
+            self._module._connection.edit_config(**kwargs)
+            result["changed"] = True
 
         result["xml"] = config_xmls
-        changed_xcvr_facts = self.get_xcvr_facts()
+        changed_xcvrs_facts = self.get_xcvrs_facts()
 
-        result["before"] = existing_xcvr_facts
+        result["before"] = existing_xcvrs_facts
         if result["changed"]:
-            result["after"] = changed_xcvr_facts
+            result["after"] = changed_xcvrs_facts
 
-        # result["warnings"] = warnings
         return result
 
-    def set_config(self, existing_xcvr_facts):
+    def set_config(self, existing_xcvrs_facts):
         """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
@@ -98,7 +98,7 @@ class Xcvr(ConfigBase):
                   to the desired configuration
         """
         want = self._module.params["config"]
-        have = existing_xcvr_facts
+        have = existing_xcvrs_facts
         resp = self.set_state(want, have)
         return to_list(resp)
 
@@ -111,7 +111,7 @@ class Xcvr(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        root = build_root_xml_node("xcvr")
+        root = build_root_xml_node("waveserver-xcvrs")
         state = self._module.params["state"]
         if state == "overridden":
             config_xmls = self._state_overridden(want, have)
@@ -124,38 +124,10 @@ class Xcvr(ConfigBase):
 
         for xml in config_xmls:
             root.append(xml)
-        raise Exception("TODO")
-        return self._module._connection.tostring(root)
-
-    def _state_replaced(self, want, have):
-        """The command generator when state is replaced
-
-        :rtype: A list
-        :returns: the xml necessary to migrate the current configuration
-                  to the desired configuration
-        """
-        intf_xml = []
-        return intf_xml
-
-    def _state_overridden(self, want, have):
-        """The command generator when state is overridden
-
-        :rtype: A list
-        :returns: the xml necessary to migrate the current configuration
-                  to the desired configuration
-        """
-        intf_xml = []
-        return intf_xml
-
-    def _state_deleted(self, want, have):
-        """The command generator when state is deleted
-
-        :rtype: A list
-        :returns: the xml necessary to migrate the current configuration
-                  to the desired configuration
-        """
-        intf_xml = []
-        return intf_xml
+        data = remove_namespaces(xml_to_string(root))
+        root = fromstring(to_bytes(data, errors="surrogate_then_replace"))
+        # raise Exception(xml_to_string(root, encoding='utf8', method='xml'))
+        return xml_to_string(root)
 
     def _state_merged(self, want, have):
         """The command generator when state is merged
@@ -164,5 +136,14 @@ class Xcvr(ConfigBase):
         :returns: the xml necessary to migrate the current configuration
                   to the desired configuration
         """
-        intf_xml = []
-        return intf_xml
+        xcvrs_xml = []
+        for child in want:
+            xcvrs_root = build_root_xml_node("xcvrs")
+            xcvrs = build_child_xml_node(xcvrs_root, "xcvrs")
+            build_child_xml_node(xcvrs, "xcvr-id", child["xcvr-id"])
+            properties = build_child_xml_node(xcvrs, "properties")
+            build_child_xml_node(
+                properties, "mode", child["properties"]["mode"]
+            )
+            xcvrs_xml.append(xcvrs)
+        return xcvrs_xml

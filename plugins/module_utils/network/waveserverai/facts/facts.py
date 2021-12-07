@@ -16,14 +16,14 @@ from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveser
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts import (
     FactsBase,
 )
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.facts.xcvr.xcvr import (
-    XcvrFacts,
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.facts.xcvrs.xcvrs import (
+    XcvrsFacts,
 )
 
 
 FACT_LEGACY_SUBSETS = dict(default=Default, config=Config)
 
-FACT_RESOURCE_SUBSETS = dict(xcvr=XcvrFacts)
+FACT_RESOURCE_SUBSETS = dict(xcvrs=XcvrsFacts)
 
 
 class Facts(FactsBase):

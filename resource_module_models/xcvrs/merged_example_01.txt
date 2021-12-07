@@ -4,7 +4,7 @@
 <placeholder for the configuration example prior to module invocation>
 
 - name: Configure interfaces
-  ciena.waveserverai.waveserverai_xcvr:
+  ciena.waveserverai.waveserverai_xcvrs:
     config:
       - name: 1/1
         properties:
