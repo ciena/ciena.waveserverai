@@ -1,0 +1,76 @@
+WAVESERVERAI_XCVRS    
+
+        This module provides declarative management of a transceiver
+
+OPTIONS (= is mandatory):
+
+- config
+        A dictionary of XVCR options
+        [Default: (null)]
+        elements: dict
+        type: list
+
+        SUBOPTIONS:
+
+        - properties
+            A dictionary of properties to be configured on the xcvr.
+            [Default: (null)]
+            type: dict
+
+            SUBOPTIONS:
+
+            - mode
+                Mode `unit' should be of type string.
+                (Choices: 100GE, OTL4.4, 56-100, 56-150, 56-200,
+                56-250, 56-300, 56-350, 56-400, 35-100, 35-150,
+                35-250, OCH, OTM, 4x10GE, 35-200, OSC, OTLC.4, OSC-
+                ADD-DROP)[Default: (null)]
+                type: str
+
+        = xcvr-id
+            Full name of xcvr, e.g. 1-1.
+
+            type: str
+
+- state
+        The state the configuration should be left in
+        (Choices: merged, overridden)[Default: merged]
+        type: str
+
+
+AUTHOR: Ciena
+
+METADATA:
+  metadata_version: '1.1'
+  status:
+  - preview
+  supported_by: network
+
+
+EXAMPLES:
+
+# Using merged
+
+- name: Configure interfaces
+  ciena.waveserverai.waveserverai_xcvrs:
+    config:
+      - name: 1-1
+        properties:
+          mode: 56-400
+    operation: merged
+
+
+RETURN VALUES:
+- after
+        The resulting configuration model invocation.
+
+        returned: when changed
+        sample: The configuration returned will always be in the same format
+        of the parameters above.
+
+- before
+        The configuration prior to the model invocation.
+
+        returned: always
+        sample: The configuration returned will always be in the same format
+        of the parameters above.

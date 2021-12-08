@@ -25,7 +25,7 @@ DOCUMENTATION: |
       suboptions:
         xcvr-id:
           description:
-          - Full name of xcvr, e.g. 1/1.
+          - Full name of xcvr, e.g. 1-1.
           type: str
           required: True
         properties:

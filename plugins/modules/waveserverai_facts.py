@@ -11,14 +11,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
 DOCUMENTATION = """
 ---
 module: waveserverai_facts
@@ -81,7 +73,10 @@ EXAMPLES = """
 """
 
 RETURN = """
-See the respective resource module parameters for the tree.
+ansible_facts:
+  description: Returns the facts collect from the device
+  returned: always
+  type: dict
 """
 
 from ansible.module_utils.basic import AnsibleModule
