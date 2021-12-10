@@ -94,3 +94,4 @@ cache
 *.log
 # Virtual envs
 env
+*.tar.gz

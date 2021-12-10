@@ -1,8 +1,6 @@
 
 # Using merged
 
-<placeholder for the configuration example prior to module invocation>
-
 - name: Configure interfaces
   ciena.waveserverai.waveserverai_xcvrs:
     config:
@@ -10,5 +8,3 @@
         properties:
           mode: 56-400
     operation: merged
-
-<placeholder for the configuration example after module invocation>
