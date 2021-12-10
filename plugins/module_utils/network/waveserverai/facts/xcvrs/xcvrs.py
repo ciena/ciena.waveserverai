@@ -10,30 +10,26 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 from copy import deepcopy
-
-from ansible.module_utils._text import to_bytes
+from ansible.module_utils._text import to_text, to_bytes
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from lxml.etree import tostring as xml_to_string, fromstring
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.netconf.netconf import (
     get,
 )
-from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.waveserverai import (
-    get_configuration,
-    get_capabilities,
-    remove_ns,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
+    remove_namespaces,
 )
 from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvrs.xcvrs import (
     XcvrsArgs,
 )
-from ansible.module_utils.six import string_types
-
 try:
-    from lxml import etree
+    from lxml.etree import tostring as xml_to_string, fromstring
 
     HAS_LXML = True
 except ImportError:
+    from xml.etree.ElementTree import fromstring, tostring as xml_to_string
+
     HAS_LXML = False
 
 
@@ -62,9 +58,6 @@ class XcvrsFacts(object):
         :rtype: dictionary
         :returns: facts
         """
-        if not HAS_LXML:
-            self._module.fail_json(msg="lxml is not installed.")
-
         if not data:
             config_filter = """
                 <xcvr:waveserver-xcvrs xmlns:xcvr="urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr">
@@ -75,9 +68,10 @@ class XcvrsFacts(object):
                 """
             data = get(self._module, filter=("subtree", config_filter))
 
-        root = remove_ns(data)
+        stripped = remove_namespaces(xml_to_string(data))
+        data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = root.xpath("/data/waveserver-xcvrs/xcvrs")
+        resources = data.xpath("/data/waveserver-xcvrs/xcvrs")
 
         objs = []
         for resource in resources:
