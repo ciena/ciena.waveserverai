@@ -78,10 +78,11 @@ class Xcvrs(ConfigBase):
             }
 
             self._module._connection.edit_config(**kwargs)
-            result["changed"] = True
-
+          
         result["xml"] = config_xmls
         changed_xcvrs_facts = self.get_xcvrs_facts()
+
+        result["changed"] = self._config_compare(existing_xcvrs_facts, changed_xcvrs_facts)
 
         result["before"] = existing_xcvrs_facts
         if result["changed"]:
@@ -147,3 +148,13 @@ class Xcvrs(ConfigBase):
             )
             xcvrs_xml.append(xcvrs)
         return xcvrs_xml
+
+    def _config_compare(self, new_config, actual_config):
+        """Compares actual configuration with intended new
+
+        :rtype: Bool
+        :returns: True if configs are equal, False if not. 
+        
+        """
+        return  new_config == actual_config
+

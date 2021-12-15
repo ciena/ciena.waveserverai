@@ -6,3 +6,8 @@ all:
       ansible_network_os: ciena.waveserverai.waveserverai
       ansible_user: su
       ansible_password: anystring
+    # WS-2P:
+    #   ansible_host: 10.92.44.207
+    #   ansible_network_os: ciena.waveserverai.waveserverai
+    #   ansible_user: su
+    #   ansible_password: anystring
