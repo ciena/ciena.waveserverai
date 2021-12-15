@@ -69,6 +69,7 @@ class Xcvrs(ConfigBase):
         config_xmls = self.set_config(existing_xcvrs_facts)
 
         for config_xml in to_list(config_xmls):
+            # raise Exception(config_xml.decode("utf-8"))
             config = f'<config>{config_xml.decode("utf-8")}</config>'
             kwargs = {
                 "config": config,
@@ -78,7 +79,7 @@ class Xcvrs(ConfigBase):
             }
 
             self._module._connection.edit_config(**kwargs)
-            result["changed"] = True
+            result["changed"] = self._config_compare()
 
         result["xml"] = config_xmls
         changed_xcvrs_facts = self.get_xcvrs_facts()
@@ -147,3 +148,8 @@ class Xcvrs(ConfigBase):
             )
             xcvrs_xml.append(xcvrs)
         return xcvrs_xml
+
+    def _config_compare(self):
+
+
+        return True
