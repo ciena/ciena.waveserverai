@@ -1,0 +1,8 @@
+---
+requires_ansible: '>=2.9.10,<2.11'
+plugin_routing:
+  action:
+    waveserverai_facts:
+      redirect: ciena.waveserverai.waveserverai_facts
+    waveserverai_xcvrs:
+      redirect: ciena.waveserverai.waveserverai_xcvrs

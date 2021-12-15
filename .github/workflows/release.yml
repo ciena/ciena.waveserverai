@@ -1,0 +1,43 @@
+---
+name: release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ansible_collections/ciena/saos10
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install collections
+        run: |
+          ansible-galaxy collection install ansible.netcommon 
+      - name: Install dependencies
+        working-directory: ./ansible_collections/ciena/saos10
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+      - name: test
+        working-directory: ./ansible_collections/ciena/saos10
+        run: |
+          ansible-test integration
+      - name: build
+        working-directory: ./ansible_collections/ciena/saos10
+        run: |
+          ansible-galaxy collection build
+      - name: release
+        working-directory: ./ansible_collections/ciena/saos10
+        run: |
+          ls *.tar.gz | xargs ansible-galaxy collection publish --api-key ${{ secrets.GALAXY_API_KEY }}
