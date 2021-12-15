@@ -1,6 +1,6 @@
 #
 # -*- coding: utf-8 -*-
-# Copyright 2021 Ciena Corporation.
+# Copyright 2021 Ciena
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
@@ -32,20 +32,24 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
     build_child_xml_node,
 )
 
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.utils.utils import (
+    config_compare
+)
+
 
 class Xcvrs(ConfigBase):
     """
     The waveserverai_xcvrs class
     """
 
-    gather_subset = ["!all", "!min"]
-    gather_network_resources = ["xcvrs"]
+    gather_subset = ['!all', '!min']
+    gather_network_resources = ['xcvrs']
 
     def __init__(self, module):
         super(Xcvrs, self).__init__(module)
 
     def get_xcvrs_facts(self):
-        """Get the 'facts' (the current configuration)
+        """ Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
@@ -53,18 +57,18 @@ class Xcvrs(ConfigBase):
         facts, _warnings = Facts(self._module).get_facts(
             self.gather_subset, self.gather_network_resources
         )
-        xcvrs_facts = facts["ansible_network_resources"].get("xcvrs")
+        xcvrs_facts = facts['ansible_network_resources'].get('xcvrs')
         if not xcvrs_facts:
             return []
         return xcvrs_facts
 
     def execute_module(self):
-        """Execute the module
+        """ Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
         """
-        result = {"changed": False}
+        result = {'changed': False}
         existing_xcvrs_facts = self.get_xcvrs_facts()
         config_xmls = self.set_config(existing_xcvrs_facts)
 
@@ -78,11 +82,11 @@ class Xcvrs(ConfigBase):
             }
 
             self._module._connection.edit_config(**kwargs)
-          
+            
         result["xml"] = config_xmls
         changed_xcvrs_facts = self.get_xcvrs_facts()
 
-        result["changed"] = self._config_compare(existing_xcvrs_facts, changed_xcvrs_facts)
+        result["changed"] = not config_compare(existing_xcvrs_facts, changed_xcvrs_facts)
 
         result["before"] = existing_xcvrs_facts
         if result["changed"]:
@@ -91,20 +95,20 @@ class Xcvrs(ConfigBase):
         return result
 
     def set_config(self, existing_xcvrs_facts):
-        """Collect the configuration from the args passed to the module,
+        """ Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        want = self._module.params["config"]
+        want = self._module.params['config']
         have = existing_xcvrs_facts
         resp = self.set_state(want, have)
         return to_list(resp)
 
     def set_state(self, want, have):
-        """Select the appropriate function based on the state provided
+        """ Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -116,19 +120,48 @@ class Xcvrs(ConfigBase):
         state = self._module.params["state"]
         if state == "overridden":
             config_xmls = self._state_overridden(want, have)
-        elif state == "deleted":
+        elif state == 'deleted':
             config_xmls = self._state_deleted(want, have)
-        elif state == "merged":
+        elif state == 'merged':
             config_xmls = self._state_merged(want, have)
-        elif state == "replaced":
+        elif state == 'replaced':
             config_xmls = self._state_replaced(want, have)
 
         for xml in config_xmls:
             root.append(xml)
         data = remove_namespaces(xml_to_string(root))
         root = fromstring(to_bytes(data, errors="surrogate_then_replace"))
-        # raise Exception(xml_to_string(root, encoding='utf8', method='xml'))
+
         return xml_to_string(root)
+
+    def _state_replaced(self, want, have):
+        """ The command generator when state is replaced
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+
+    def _state_overridden(self, want, have):
+        """ The command generator when state is overridden
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+    def _state_deleted(self, want, have):
+        """ The command generator when state is deleted
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
 
     def _state_merged(self, want, have):
         """The command generator when state is merged

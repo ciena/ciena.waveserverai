@@ -13,14 +13,14 @@
     #     gather_network_resources:
     #       - all
     - name: Configure interfaces
-      ciena.waveserverai.waveserverai_xcvrs:
+      waveserverai_xcvrs:
         config:
           - xcvr-id: 1-1
             properties:
               mode: 56-400
 
     - name: Configure interfaces
-      ciena.waveserverai.waveserverai_xcvrs:
+      waveserverai_xcvrs:
         config:
           - xcvr-id: 2-2
             properties:
