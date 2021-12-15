@@ -69,7 +69,6 @@ class Xcvrs(ConfigBase):
         config_xmls = self.set_config(existing_xcvrs_facts)
 
         for config_xml in to_list(config_xmls):
-            # raise Exception(config_xml.decode("utf-8"))
             config = f'<config>{config_xml.decode("utf-8")}</config>'
             kwargs = {
                 "config": config,
