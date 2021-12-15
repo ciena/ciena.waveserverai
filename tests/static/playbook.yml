@@ -25,3 +25,8 @@
           - xcvr-id: 2-2
             properties:
               mode: 56-400
+      register: mystdout
+      
+
+    - debug:
+          var: mystdout.stdout_lines
