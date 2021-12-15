@@ -79,10 +79,11 @@ class Xcvrs(ConfigBase):
             }
 
             self._module._connection.edit_config(**kwargs)
-            result["changed"] = self._config_compare(new_config=existing_xcvrs_facts, actual_config=self.get_xcvrs_facts()) # TODO
-
+          
         result["xml"] = config_xmls
         changed_xcvrs_facts = self.get_xcvrs_facts()
+
+        result["changed"] = self._config_compare(existing_xcvrs_facts, changed_xcvrs_facts)
 
         result["before"] = existing_xcvrs_facts
         if result["changed"]:
