@@ -33,7 +33,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 
 from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.utils.utils import (
-    config_compare
+    config_is_diff
 )
 
 
@@ -82,11 +82,10 @@ class Xcvrs(ConfigBase):
             }
 
             self._module._connection.edit_config(**kwargs)
-            
         result["xml"] = config_xmls
         changed_xcvrs_facts = self.get_xcvrs_facts()
 
-        result["changed"] = not config_compare(existing_xcvrs_facts, changed_xcvrs_facts)
+        result["changed"] = not config_is_diff(existing_xcvrs_facts, changed_xcvrs_facts)
 
         result["before"] = existing_xcvrs_facts
         if result["changed"]:
@@ -153,6 +152,7 @@ class Xcvrs(ConfigBase):
         """
         intf_xml = []
         return intf_xml
+
     def _state_deleted(self, want, have):
         """ The command generator when state is deleted
 
@@ -181,13 +181,3 @@ class Xcvrs(ConfigBase):
             )
             xcvrs_xml.append(xcvrs)
         return xcvrs_xml
-
-    def _config_compare(self, new_config, actual_config):
-        """Compares actual configuration with intended new
-
-        :rtype: Bool
-        :returns: True if configs are equal, False if not. 
-        
-        """
-        return  new_config == actual_config
-

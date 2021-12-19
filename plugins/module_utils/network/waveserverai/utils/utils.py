@@ -7,7 +7,7 @@
 # utils
 
 
-def config_compare(new_config, actual_config):
+def config_is_diff(new_config, actual_config):
     """Compares actual configuration with intended new
 
     :rtype: Bool
