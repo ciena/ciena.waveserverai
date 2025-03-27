@@ -48,12 +48,8 @@ waveserverai_provider_spec = {
     "host": dict(),
     "port": dict(type="int"),
     "username": dict(fallback=(env_fallback, ["ANSIBLE_NET_USERNAME"])),
-    "password": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]), no_log=True
-    ),
-    "ssh_keyfile": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]), type="path"
-    ),
+    "password": dict(fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]), no_log=True),
+    "ssh_keyfile": dict(fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]), type="path"),
     "timeout": dict(type="int"),
     "transport": dict(default="netconf", choices=["cli", "netconf"]),
 }
@@ -93,9 +89,7 @@ def get_connection(module):
     if network_api == "cliconf":
         module._waveserverai_connection = Connection(module._socket_path)
     elif network_api == "netconf":
-        module._waveserverai_connection = NetconfConnection(
-            module._socket_path
-        )
+        module._waveserverai_connection = NetconfConnection(module._socket_path)
     else:
         module.fail_json(msg="Invalid connection type %s" % network_api)
 

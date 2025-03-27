@@ -4,7 +4,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
-The waveserverai_xcvrs class
+The waveserverai_ptps class
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
@@ -36,23 +36,23 @@ from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveser
     config_is_diff,
 )
 
-NAMESPACE = "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr"
-ROOT_KEY = "waveserver-xcvrs"
-RESOURCE = "xcvrs"
-XML_ITEMS = "xcvrs"
-XML_ITEMS_KEY = "xcvr-id"
+NAMESPACE = "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-ptp"
+ROOT_KEY = "waveserver-ptps"
+RESOURCE = "ptps"
+XML_ITEMS = "ptps"
+XML_ITEMS_KEY = "ptp-id"
 
 
-class Xcvrs(ConfigBase):
+class Ptps(ConfigBase):
     """
-    The waveserverai_xcvrs class
+    The waveserverai_ptps class
     """
 
     gather_subset = ["!all", "!min"]
     gather_network_resources = [RESOURCE]
 
     def __init__(self, module):
-        super(Xcvrs, self).__init__(module)
+        super(Ptps, self).__init__(module)
 
     def get_facts(self):
         """Get the 'facts' (the current configuration)
@@ -194,5 +194,5 @@ class Xcvrs(ConfigBase):
         if not want:
             want = have
         for config in want:
-            response.append({"xcvr-id": config["xcvr-id"], "operation": "delete"})
+            response.append({"ptp-id": config["ptp-id"], "operation": "delete"})
         return response
