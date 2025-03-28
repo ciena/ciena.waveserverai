@@ -28,7 +28,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common i
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.netconf.netconf import (
     get,
 )
-from ansible_collections.ciena.ptps.plugins.module_utils.network.waveserverai.argspec.ptps.ptps import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.ptps.ptps import (
     PtpsArgs,
 )
 

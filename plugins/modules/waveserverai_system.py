@@ -1174,10 +1174,10 @@ xml:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.system.plugins.module_utils.network.waveserverai.argspec.system.system import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.system.system import (
     SystemArgs,
 )
-from ansible_collections.ciena.system.plugins.module_utils.network.waveserverai.config.system.system import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.system.system import (
     System,
 )
 

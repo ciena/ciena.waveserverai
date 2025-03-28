@@ -448,10 +448,10 @@ xml:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.ports.plugins.module_utils.network.waveserverai.argspec.ports.ports import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.ports.ports import (
     PortsArgs,
 )
-from ansible_collections.ciena.ports.plugins.module_utils.network.waveserverai.config.ports.ports import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.ports.ports import (
     Ports,
 )
 

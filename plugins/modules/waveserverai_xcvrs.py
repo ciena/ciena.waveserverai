@@ -408,10 +408,10 @@ xml:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.xcvrs.plugins.module_utils.network.waveserverai.argspec.xcvrs.xcvrs import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.xcvrs.xcvrs import (
     XcvrsArgs,
 )
-from ansible_collections.ciena.xcvrs.plugins.module_utils.network.waveserverai.config.xcvrs.xcvrs import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.xcvrs.xcvrs import (
     Xcvrs,
 )
 

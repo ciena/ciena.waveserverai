@@ -231,10 +231,10 @@ xml:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ciena.ptps.plugins.module_utils.network.waveserverai.argspec.ptps.ptps import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.argspec.ptps.ptps import (
     PtpsArgs,
 )
-from ansible_collections.ciena.ptps.plugins.module_utils.network.waveserverai.config.ptps.ptps import (
+from ansible_collections.ciena.waveserverai.plugins.module_utils.network.waveserverai.config.ptps.ptps import (
     Ptps,
 )
 
