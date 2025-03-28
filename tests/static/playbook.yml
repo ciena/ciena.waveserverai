@@ -6,25 +6,25 @@
   gather_facts: false
   name: Gather facts for ciena device Waveserver Ai
   tasks:
-    # - name: get device facts for waveserverai device
-    #   ciena.waveserverai.waveserverai_facts:
-    #     gather_subset:
-    #       - all
-    #     gather_network_resources:
-    #       - all
-    - name: Configure interfaces
-      waveserverai_xcvrs:
-        config:
-          - xcvr-id: 1-1
-            properties:
-              mode: 56-400
+    - name: get device facts for waveserverai device
+      ciena.waveserverai.waveserverai_facts:
+        gather_subset:
+          - min
+        gather_network_resources:
+          - all
+    # - name: Configure interfaces
+    #   waveserverai_xcvrs:
+    #     config:
+    #       - xcvr-id: 1-1
+    #         properties:
+    #           mode: 56-400
 
-    - name: Configure interfaces
-      waveserverai_xcvrs:
-        config:
-          - xcvr-id: 2-2
-            properties:
-              mode: 56-400
+    # - name: Configure interfaces
+    #   waveserverai_xcvrs:
+    #     config:
+    #       - xcvr-id: 2-2
+    #         properties:
+    #           mode: 56-400
 
     #   register: mystdout
     # - debug:

@@ -80,7 +80,7 @@ class SystemFacts(object):
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resource = data.xpath("/rpc-reply/data/waveserver-system")[0]
+        resource = data.xpath("//waveserver-system")[0]
         obj = self.render_config(self.generated_spec, resource)
 
         facts = {}

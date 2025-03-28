@@ -80,7 +80,7 @@ class XcvrsFacts(object):
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = data.xpath("/rpc-reply/data/waveserver-xcvrs/xcvrs")
+        resources = data.xpath("//waveserver-xcvrs/xcvrs")
         objs = []
         for resource in resources:
             if resource:

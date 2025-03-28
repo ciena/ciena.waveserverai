@@ -80,7 +80,7 @@ class PtpsFacts(object):
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = data.xpath("/rpc-reply/data/waveserver-ptps/ptps")
+        resources = data.xpath("//waveserver-ptps/ptps")
         objs = []
         for resource in resources:
             if resource:
