@@ -12,20 +12,17 @@
           - min
         gather_network_resources:
           - all
-    # - name: Configure interfaces
-    #   waveserverai_xcvrs:
-    #     config:
-    #       - xcvr-id: 1-1
-    #         properties:
-    #           mode: 56-400
 
-    # - name: Configure interfaces
-    #   waveserverai_xcvrs:
-    #     config:
-    #       - xcvr-id: 2-2
-    #         properties:
-    #           mode: 56-400
+    - name: Disable interfaces
+      waveserverai_xcvrs:
+        config:
+          - xcvr_id: 1-1
+            state:
+              admin_state: disabled
 
-    #   register: mystdout
-    # - debug:
-    #       var: mystdout.stdout_lines
+    - name: Enable interfaces
+      waveserverai_xcvrs:
+        config:
+          - xcvr_id: 1-1
+            state:
+              admin_state: enabled
