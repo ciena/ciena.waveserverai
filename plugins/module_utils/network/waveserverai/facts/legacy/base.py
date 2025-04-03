@@ -54,9 +54,7 @@ class Default(FactsBase):
         """
         reply = get(self.module, filter=("subtree", config_filter))
         root = remove_ns(reply)
-        network_os_version = root.xpath(
-            "/data/waveserver-software/active/version"
-        )[0].text
+        network_os_version = root.xpath("/data/waveserver-software/active/version")[0].text
         self.facts["version"] = network_os_version
 
         config_filter = """
@@ -66,12 +64,8 @@ class Default(FactsBase):
         """
         reply = get(self.module, filter=("subtree", config_filter))
         root = remove_ns(reply)
-        serial_number = root.xpath(
-            "/data/waveserver-chassis/identification/serial-number"
-        )[0].text
-        model = root.xpath("/data/waveserver-chassis/identification/model")[
-            0
-        ].text
+        serial_number = root.xpath("/data/waveserver-chassis/identification/serial-number")[0].text
+        model = root.xpath("/data/waveserver-chassis/identification/model")[0].text
         self.facts["serialnum"] = serial_number
         self.facts["model"] = model
         self.facts["platform"] = "Waveserver Ai"

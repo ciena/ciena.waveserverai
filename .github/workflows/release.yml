@@ -16,28 +16,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: ansible_collections/ciena/saos10
+          path: ansible_collections/ciena/waveserverai
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install collections
         run: |
-          ansible-galaxy collection install ansible.netcommon 
+          ansible-galaxy collection install ansible.netcommon
       - name: Install dependencies
-        working-directory: ./ansible_collections/ciena/saos10
+        working-directory: ./ansible_collections/ciena/waveserverai
         run: |
           pip install -r requirements.txt
           pip install -r requirements-test.txt
       - name: test
-        working-directory: ./ansible_collections/ciena/saos10
+        working-directory: ./ansible_collections/ciena/waveserverai
         run: |
           ansible-test integration
       - name: build
-        working-directory: ./ansible_collections/ciena/saos10
+        working-directory: ./ansible_collections/ciena/waveserverai
         run: |
           ansible-galaxy collection build
       - name: release
-        working-directory: ./ansible_collections/ciena/saos10
+        working-directory: ./ansible_collections/ciena/waveserverai
         run: |
           ls *.tar.gz | xargs ansible-galaxy collection publish --api-key ${{ secrets.GALAXY_API_KEY }}
