@@ -4,6 +4,8 @@ plugin_routing:
   action:
     facts:
       redirect: ciena.waveserverai.waveserverai_facts
+    command:
+      redirect: ciena.waveserverai.waveserverai_command
     ports:
       redirect: ciena.waveserverai.waveserverai_ports
     ptps:

@@ -119,3 +119,24 @@ def get_configuration(module, source="running", format="xml", filter=None):
     except ConnectionError as exc:
         module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
     return reply
+
+
+def run_commands(module, commands, check_rc=True):
+    """Send a list of commands to the device over the active connection."""
+
+    capabilities = get_capabilities(module)
+    network_api = capabilities.get("network_api")
+    if network_api != "cliconf":
+        module.fail_json(
+            msg=(
+                "waveserverai_command requires ansible_connection=network_cli. "
+                "Current connection type is '%s'." % (network_api or "unknown")
+            )
+        )
+
+    connection = get_connection(module)
+    try:
+        response = connection.run_commands(commands=commands, check_rc=check_rc)
+    except ConnectionError as exc:
+        module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
+    return response
