@@ -20,7 +20,7 @@ PEP440 is the schema used to describe the versions of Ansible.
 
 ### Supported connections
 
-Supports ``netconf`` connections.
+Supports ``netconf`` and ``network_cli`` connections.
 
 ## Included content
 
@@ -30,9 +30,20 @@ Name | Description
 --- | ---
 [ciena.waveserverai.waveserverai](https://github.com/ciena/ciena.waveserverai/blob/master/docs/ciena.waveserverai.waveserverai_netconf.rst)|Use waveserverai netconf plugin to run netconf commands on Ciena waveserverai platform
 
+### Cliconf plugins
+Name | Description
+--- | ---
+[ciena.waveserverai.waveserverai](https://github.com/ciena/ciena.waveserverai/blob/master/plugins/cliconf/waveserverai.py)|Low level CLI transport for running commands on Waveserver Ai
+
+### Terminal plugins
+Name | Description
+--- | ---
+[ciena.waveserverai.waveserverai](https://github.com/ciena/ciena.waveserverai/blob/master/plugins/terminal/waveserverai.py)|Prompt handling definitions for Waveserver Ai CLI sessions
+
 ### Modules
 Name | Description
 --- | ---
+[ciena.waveserverai.waveserverai_command](https://github.com/ciena/ciena.waveserverai/blob/master/docs/ciena.waveserverai.waveserverai_command_module.rst)|Run commands on remote devices running Ciena Waveserver Ai
 [ciena.waveserverai.waveserverai_facts](https://github.com/ciena/ciena.waveserverai/blob/master/docs/ciena.waveserverai.waveserverai_facts_module.rst)|Get facts about waveserverai devices.
 [ciena.waveserverai.waveserverai_ports](https://github.com/ciena/ciena.waveserverai/blob/master/docs/ciena.waveserverai.waveserverai_ports_module.rst)|Waveserver port configuration and operational data.Manage the ports ports configuration of a Ciena waveserverai device
 [ciena.waveserverai.waveserverai_ptps](https://github.com/ciena/ciena.waveserverai/blob/master/docs/ciena.waveserverai.waveserverai_ptps_module.rst)|Waveserver Physical Termination Point (PTP) configuration and operational data.Manage the ptps ptps configuration of a Ciena waveserverai device
@@ -111,8 +122,5 @@ ansible-playbook -e rm_dest=$PATH_TO_ANSIBLE_COLLECTIONS_DIR \
 ## Licensing
 
 See [LICENSE](LICENSE) to see the full text.
-
-
-
 
 
