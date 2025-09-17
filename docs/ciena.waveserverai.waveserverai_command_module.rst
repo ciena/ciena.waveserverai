@@ -148,27 +148,16 @@ Examples
       ciena.waveserverai.waveserverai_command:
         commands:
         - software show
-        - show ports summary
+        - xcvr show
 
     - name: run multiple commands and evaluate the output
-      ciena.waveserverai.waveserverai_command:
+    ciena.waveserverai.waveserverai_command:
         commands:
         - software show
-        - show ports summary
+        - xcvr show
         wait_for:
         - result[0] contains Installed
         - result[1] contains Port
-
-    - name: run commands that require answering a prompt
-      ciena.waveserverai.waveserverai_command:
-        commands:
-        - command: clear counters port 1-1
-          prompt: '[confirm]'
-          answer: y
-        - command: clear counters port 1-2
-          prompt: '[confirm]'
-          answer: '\\r'
-
 
 
 Return Values
